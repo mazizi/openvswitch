@@ -4220,9 +4220,9 @@ rule_dpif_is_fail_open(const struct rule_dpif *rule)
 }
 
 bool
-rule_dpif_is_table_miss(const struct rule_dpif *rule)
+rule_dpif_is_internal(const struct rule_dpif *rule)
 {
-    return rule_is_table_miss(&rule->up);
+    return rule_is_internal(&rule->up);
 }
 
 ovs_be64
@@ -4246,6 +4246,14 @@ struct rule_actions *
 rule_dpif_get_actions(const struct rule_dpif *rule)
 {
     return rule_get_actions(&rule->up);
+}
+
+
+/* Returns true if 'rule' is an internal rule, false otherwise. */
+bool
+rule_is_internal(const struct rule *rule)
+{
+    return rule->table_id == TBL_INTERNAL;
 }
 
 /* Subfacets. */
