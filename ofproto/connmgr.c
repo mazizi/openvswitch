@@ -1896,7 +1896,7 @@ ofmonitor_create(const struct ofputil_flow_monitor_request *request,
 
     m = ofmonitor_lookup(ofconn, request->id);
     if (m) {
-        return OFPERR_OFPMOFC_MONITOR_EXISTS;
+        return OFPERR_OFPMOFC_UNKNOWN_MONITOR;
     }
 
     m = xmalloc(sizeof *m);
