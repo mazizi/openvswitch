@@ -1945,21 +1945,21 @@ ofmonitor_report(struct connmgr *mgr, struct rule *rule,
                  const struct ofconn *abbrev_ofconn, ovs_be32 abbrev_xid)
     OVS_REQUIRES(ofproto_mutex)
 {
-    enum nx_flow_monitor_flags update;
+    enum ofp14_flow_monitor_flags update;
     struct ofconn *ofconn;
 
     switch (event) {
     case NXFME_ADDED:
-        update = NXFMF_ADD;
+        update = OFPFMF14_ADD;
         rule->add_seqno = rule->modify_seqno = monitor_seqno++;
         break;
 
     case NXFME_DELETED:
-        update = NXFMF_DELETE;
+        update = OFPFMF14_REMOVED;
         break;
 
     case NXFME_MODIFIED:
-        update = NXFMF_MODIFY;
+        update = OFPFMF14_MODIFY;
         rule->modify_seqno = monitor_seqno++;
         break;
 
@@ -1969,7 +1969,7 @@ ofmonitor_report(struct connmgr *mgr, struct rule *rule,
     }
 
     LIST_FOR_EACH (ofconn, node, &mgr->all_conns) {
-        enum nx_flow_monitor_flags flags = 0;
+        enum ofp14_flow_monitor_flags flags = 0;
         struct ofmonitor *m;
 
         if (ofconn->monitor_paused) {
@@ -2013,7 +2013,7 @@ ofmonitor_report(struct connmgr *mgr, struct rule *rule,
                 fu.hard_timeout = rule->hard_timeout;
                 ovs_mutex_unlock(&rule->mutex);
 
-                if (flags & NXFMF_ACTIONS) {
+                if (flags & OFPFMF14_INSTRUCTIONS) {
                     fu.ofpacts = rule->actions->ofpacts;
                     fu.ofpacts_len = rule->actions->ofpacts_len;
                 } else {
